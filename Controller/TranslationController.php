@@ -28,13 +28,23 @@ class TranslationController extends Controller
 
         $stats = $this->get('lexik_translation.overview.stats_aggregator')->getStats();
 
-        return $this->render('LexikTranslationBundle:Translation:overview.html.twig', array(
-            'layout'         => $this->container->getParameter('lexik_translation.base_layout'),
-            'locales'        => $this->getManagedLocales(),
-            'domains'        => $storage->getTransUnitDomains(),
-            'latestTrans'    => $storage->getLatestUpdatedAt(),
-            'stats'          => $stats,
-        ));
+        return $this->render('@LexikTranslation\Translation\overview.html.twig', [
+            'layout'      => $this->container->getParameter('lexik_translation.base_layout'),
+            'locales'     => $this->getManagedLocales(),
+            'domains'     => $storage->getTransUnitDomains(),
+            'latestTrans' => $storage->getLatestUpdatedAt(),
+            'stats'       => $stats,
+        ]);
+    }
+
+    /**
+     * Returns managed locales.
+     *
+     * @return array
+     */
+    protected function getManagedLocales()
+    {
+        return $this->get('lexik_translation.locale.manager')->getLocales();
     }
 
     /**
@@ -49,31 +59,31 @@ class TranslationController extends Controller
             $tokens = $this->get('lexik_translation.token_finder')->find();
         }
 
-        return $this->render('LexikTranslationBundle:Translation:grid.html.twig', array(
+        return $this->render('@LexikTranslation\Translation\grid.html.twig', [
             'layout'         => $this->container->getParameter('lexik_translation.base_layout'),
             'inputType'      => $this->container->getParameter('lexik_translation.grid_input_type'),
             'autoCacheClean' => $this->container->getParameter('lexik_translation.auto_cache_clean'),
             'toggleSimilar'  => $this->container->getParameter('lexik_translation.grid_toggle_similar'),
             'locales'        => $this->getManagedLocales(),
             'tokens'         => $tokens,
-        ));
+        ]);
     }
 
     /**
      * Remove cache files for managed locales.
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function invalidateCacheAction(Request $request)
     {
         $this->get('lexik_translation.translator')->removeLocalesCacheFiles($this->getManagedLocales());
 
-        $message = $this->get('translator')->trans('translations.cache_removed', array(), 'LexikTranslationBundle');
+        $message = $this->get('translator')->trans('translations.cache_removed', [], 'LexikTranslationBundle');
 
         if ($request->isXmlHttpRequest()) {
             $this->checkCsrf();
 
-            return new JsonResponse(array('message' => $message));
+            return new JsonResponse(['message' => $message]);
         }
 
         $this->get('session')->getFlashBag()->add('success', $message);
@@ -93,7 +103,7 @@ class TranslationController extends Controller
         $form = $this->createForm(TransUnitType::class, $handler->createFormData(), $handler->getFormOptions());
 
         if ($handler->process($form, $request)) {
-            $message = $this->get('translator')->trans('translations.successfully_added', array(), 'LexikTranslationBundle');
+            $message = $this->get('translator')->trans('translations.successfully_added', [], 'LexikTranslationBundle');
 
             $this->get('session')->getFlashBag()->add('success', $message);
 
@@ -102,19 +112,9 @@ class TranslationController extends Controller
             return $this->redirect($this->generateUrl($redirectUrl));
         }
 
-        return $this->render('LexikTranslationBundle:Translation:new.html.twig', array(
+        return $this->render('LexikTranslationBundle:Translation:new.html.twig', [
             'layout' => $this->container->getParameter('lexik_translation.base_layout'),
             'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Returns managed locales.
-     *
-     * @return array
-     */
-    protected function getManagedLocales()
-    {
-        return $this->get('lexik_translation.locale.manager')->getLocales();
+        ]);
     }
 }
