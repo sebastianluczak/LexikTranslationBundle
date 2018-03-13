@@ -1,8 +1,8 @@
 {
-    "name": "lexik/translation-bundle",
+    "name": "sebastianl/translation-bundle",
     "type": "symfony-bundle",
-    "description": "This bundle allows to import translation files content into the database and provide a GUI to edit translations.",
-    "keywords": ["Symfony2", "bundle", "translation", "i18n"],
+    "description": "This bundle allows to import translation files content into the database and provide a GUI to edit translations. Works OOTB with Symfony 4.",
+    "keywords": ["Symfony4", "bundle", "translation", "i18n"],
     "homepage": "https://github.com/lexik/LexikTranslationBundle",
     "license": "MIT",
     "prefer-stable": true,
@@ -14,11 +14,15 @@
         {
             "name": "Dev Lexik",
             "email": "dev@lexik.fr"
+        },
+        {
+            "name": "Sebastian Luczak",
+            "email": "sebastian.m.luczak@gmail.com"
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0",
-        "symfony/framework-bundle": "~2.8|~3.0|~4.0"
+        "php": "^7.1",
+        "symfony/framework-bundle": "~4.0"
     },
     "require-dev": {
         "doctrine/orm": "^2.2.3",
