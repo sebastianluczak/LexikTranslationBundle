@@ -112,7 +112,7 @@ class TranslationController extends Controller
             return $this->redirect($this->generateUrl($redirectUrl));
         }
 
-        return $this->render('LexikTranslationBundle:Translation:new.html.twig', [
+        return $this->render('@LexikTranslation/Translation/new.html.twig', [
             'layout' => $this->container->getParameter('lexik_translation.base_layout'),
             'form'   => $form->createView(),
         ]);
