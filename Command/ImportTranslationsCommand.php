@@ -199,7 +199,7 @@ class ImportTranslationsCommand extends ContainerAwareCommand
      */
     protected function importAppTranslationFiles(array $locales, array $domains)
     {
-        $finder = $this->findTranslationsFiles($this->getApplication()->getKernel()->getRootDir(), $locales, $domains);
+        $finder = $this->findTranslationsFiles($this->getApplication()->getKernel()->getRootDir() . '/..', $locales, $domains);
         $this->importTranslationFiles($finder);
     }
 
@@ -285,7 +285,7 @@ class ImportTranslationsCommand extends ContainerAwareCommand
         }
 
         if (true === $autocompletePath) {
-            $dir = (0 === strpos($path, $this->getApplication()->getKernel()->getRootDir() . '/Resources')) ? $path : $path . '/Resources/translations';
+            $dir = (0 === strpos($path, $this->getApplication()->getKernel()->getRootDir() . '/Resources')) ? $path : $path . '/translations';
         } else {
             $dir = $path;
         }
